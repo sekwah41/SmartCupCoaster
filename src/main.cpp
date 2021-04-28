@@ -22,22 +22,45 @@ HX711 scale;
 Scheduler r;
 
 // How often to check for changes
-#define DELAY 500
+#define WEIDHT_CHECK_DELAY 500
+#define LED_UPDATE_DELAY 10
 
-#define NOTIF_FADE_SPEED
+// How many seconds to take
+#define NOTIF_FADE_SPEED 4
+
+#define SECONDS 1000
+
 
 void updateLedCallback() {
-    Serial.println("TASK 1");
 
-    millis()
+    if(millis() <  6 * SECONDS) {
 
+        double multiplier = abs(sin(millis() * (PI * 0.001 / NOTIF_FADE_SPEED)));
 
-    if(pixelStage >= numPixels) {
-        pixelStage = 0;
+        for(int i=0; i<numPixels; i++) {
+            pixels->setPixelColor(i, pixels->Color(0 * multiplier,70 * multiplier,255 * multiplier));
+        }
+    } else if(millis() <  13 * SECONDS) {
+        pixels->clear();
+    } else if(millis() <  18 * SECONDS) {
+
+        double multiplier = abs(sin(millis() * (PI * 0.001 / NOTIF_FADE_SPEED)));
+        for(int i=0; i<numPixels; i++) {
+            pixels->setPixelColor(i, pixels->Color(255 * multiplier,0 * multiplier,0 * multiplier));
+        }
+    } else if(millis() <  24 * SECONDS) {
+        pixels->clear();
+    } else if(millis() <  27 * SECONDS) {
+
+        double multiplier = abs(sin(millis() * (PI * 0.001 / NOTIF_FADE_SPEED * 4)));
+        for(int i=0; i<numPixels; i++) {
+            pixels->setPixelColor(i, pixels->Color(0 * multiplier,255 * multiplier,0 * multiplier));
+        }
+    } else {
+
         pixels->clear();
     }
 
-    pixels->setPixelColor(pixelStage++, pixels->Color(0,150,0));
 
     pixels->show();
 }
@@ -53,8 +76,8 @@ void checkWeightCallback() {
     }
 }
 
-Task neopixelsTask(500, -1, &updateLedCallback);
-Task checkWeightTask(100, -1, &checkWeightCallback);
+Task neopixelsTask(LED_UPDATE_DELAY, -1, &updateLedCallback);
+Task checkWeightTask(WEIDHT_CHECK_DELAY, -1, &checkWeightCallback);
 
 void setup() {
     // put your setup code here, to run once:

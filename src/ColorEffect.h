@@ -12,7 +12,7 @@ class ColorEffect {
 private:
     unsigned long startTime;
 public:
-    void update(Adafruit_NeoPixel *pixels)
+    void update(Adafruit_NeoPixel *pixels);
 
 };
 
