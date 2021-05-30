@@ -30,4 +30,4 @@ add_custom_target(
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-add_executable(Z_DUMMY_TARGET ${SRC_LIST} src/ColorEffect.cpp src/ColorEffect.h src/Color.cpp src/Color.h)
+add_executable(Z_DUMMY_TARGET ${SRC_LIST})

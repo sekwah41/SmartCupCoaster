@@ -13,6 +13,6 @@
 Color::Color(uint8_t r, uint8_t g, uint8_t b) : r(r), g(g), b(b) {
 }
 
-uint32_t Color::result() {
+uint32_t Color::result() const {
     return ((uint32_t)r << 16) | ((uint32_t)g <<  8) | b;
 }

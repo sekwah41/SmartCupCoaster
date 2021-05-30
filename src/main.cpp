@@ -3,8 +3,6 @@
 #include <HX711.h>
 #include <TaskScheduler.h>
 
-// Which pin on the Arduino is connected to the NeoPixels?
-int pin        =  4;
 
 // How many NeoPixels are attached to the Arduino?
 int numPixels   = 8; // Popular NeoPixel ring size
@@ -13,8 +11,10 @@ int numPixels   = 8; // Popular NeoPixel ring size
 // information on possible values.
 int pixelFormat = NEO_GRB + NEO_KHZ800;
 
-const int LOADCELL_DOUT_PIN = 2;
-const int LOADCELL_SCK_PIN = 3;
+// Which LED_PIN on the Arduino is connected to the NeoPixels?
+const int LED_PIN            =  4;
+const int LOADCELL_DOUT_PIN   = 2;
+const int LOADCELL_SCK_PIN    = 32;
 
 // Pointer for pixels to control
 Adafruit_NeoPixel *pixels;
@@ -22,7 +22,7 @@ HX711 scale;
 Scheduler r;
 
 // How often to check for changes
-#define WEIDHT_CHECK_DELAY 500
+#define WEIGHT_CHECK_DELAY 500
 #define LED_UPDATE_DELAY 10
 
 // How many seconds to take
@@ -33,7 +33,7 @@ Scheduler r;
 
 void updateLedCallback() {
 
-    if(millis() <  6 * SECONDS) {
+    if(millis() >  3 * SECONDS && millis() <  6 * SECONDS) {
 
         double multiplier = abs(sin(millis() * (PI * 0.001 / NOTIF_FADE_SPEED)));
 
@@ -77,11 +77,11 @@ void checkWeightCallback() {
 }
 
 Task neopixelsTask(LED_UPDATE_DELAY, -1, &updateLedCallback);
-Task checkWeightTask(WEIDHT_CHECK_DELAY, -1, &checkWeightCallback);
+Task checkWeightTask(WEIGHT_CHECK_DELAY, -1, &checkWeightCallback);
 
 void setup() {
     // put your setup code here, to run once:
-    pixels = new Adafruit_NeoPixel(numPixels, pin, pixelFormat);
+    pixels = new Adafruit_NeoPixel(numPixels, LED_PIN, pixelFormat);
 
     Serial.begin(9600);
     scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
